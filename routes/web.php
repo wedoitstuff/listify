@@ -17,6 +17,10 @@ Route::get('/', function () {
     return view('welcome');
 })->name('Dashboard');
 
+Route::get('/completed', function () {
+    return view('completed');
+})->name('Completed');
+
 Route::post('/newEntry', function () {
     $entry = $_POST['entry'];
     $date = $_POST['date'];
@@ -41,6 +45,19 @@ Route::post('/editEntry/{id}',function($id){
     $list=Listify::find($id);  
     $list->date=$_POST['date'];  
     $list->todo=$_POST['entry'];  
+    $list->save();  
+
+    return redirect()->route('Dashboard');
+});  
+
+Route::get('/completeEntry/{id}',function($id){  
+    $list=Listify::find($id); 
+    if($list->status == 0){
+        $list->status=1;
+    }else{
+        $list->status=0;
+    }
+       
     $list->save();  
 
     return redirect()->route('Dashboard');

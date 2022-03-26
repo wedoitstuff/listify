@@ -1,6 +1,6 @@
 <?php
 use App\Models\Listify;
-$list=Listify::where("status", "=", 0)->get();
+$list=Listify::where("status", "=", 1)->get();
 ?>
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -8,7 +8,7 @@ $list=Listify::where("status", "=", 0)->get();
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Todo List</title>
+        <title>Todo List :: Completed</title>
 
         <link rel="stylesheet" href="assets/style.css">
         <link rel="stylesheet" href="assets/custom.css">
@@ -32,13 +32,7 @@ $list=Listify::where("status", "=", 0)->get();
                 <div class="container">
                     <div class = 'row mt-4'>
                         <div class = 'col'>
-                            <h1 class="">Your List Entries</h1>
-                        </div>
-                        <div class = 'col text-end'>
-                            <button type="button" class="btn btn-primary btn-pill" data-bs-toggle="modal" data-bs-target="#newListItem">
-                                New List Item
-                            </button>
-                              
+                            <h1 class="">Your Completed List Entries</h1>
                         </div>
                     </div>
                     <div class = 'py-3'>
@@ -48,7 +42,7 @@ $list=Listify::where("status", "=", 0)->get();
                         <div class = "col">
                             <?php
                             if(count($list) < 1){
-                                echo "<h1 class = 'text-black-50 display-6 text-center' style = 'margin: 0 auto;'>No List Entries, why not add some tasks...</h1>";
+                                echo "<h1 class = 'text-black-50 display-6 text-center' style = 'margin: 0 auto;'>No List Entries completed...</h1>";
                             }
                             foreach($list as $x){ ?>
                             <?php if($x->status == 0){$text="";}else{$text="bg-success bg-opacity-25";}?>
