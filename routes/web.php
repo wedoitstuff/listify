@@ -15,14 +15,31 @@ use App\Models\Listify;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('Dashboard');
 Route::post('/newEntry', function () {
-    echo "<pre>";
-    print_r($_POST);
+    $entry = $_POST['entry'];
+    $date = $_POST['date'];
+
+    $todo = new Listify;
+    $todo->date=$date;
+    $todo->todo=$entry;
+    $todo->status=0;
+    $todo->save();
+
+    return redirect()->route('Dashboard');
 });
 Route::get('/dataTest', function () {
     $list=Listify::all();
     foreach($list as $x){
         echo $x->todo . "<br>";
     }
+});
+Route::get('/editEntry/{id}', function ($id) {
+    echo 'Entry ID = '.  $id;
+});
+Route::get('/deleteEntry/{id}', function ($id) {
+    $list = Listify::find($id);
+    $list->delete();
+
+    return redirect()->route('Dashboard');
 });

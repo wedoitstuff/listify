@@ -1,22 +1,6 @@
 <?php
-$json = [
-    [
-        "date" => "23/03/2022",
-        "entry" => "This is a test"
-    ],
-    [
-        "date" => "24/03/2022",
-        "entry" => "This is a test too"
-    ],
-    [
-        "date" => "25/03/2022",
-        "entry" => "This is a test also"
-    ],
-    [
-        "date" => "26/03/2022",
-        "entry" => "Take the banana off the fire"
-    ]
-];
+use App\Models\Listify;
+$list=Listify::all();
 ?>
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -28,6 +12,7 @@ $json = [
 
         <link rel="stylesheet" href="assets/style.css">
         <link rel="stylesheet" href="assets/custom.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     </head>
     <body>
     <div class="d-flex" id="wrapper">
@@ -66,14 +51,17 @@ $json = [
                     <div class = "mt-2">
                         <div class = "col">
                             <?php
-                            foreach($json as $x){ ?>
+                            if(count($list) < 1){
+                                echo "<h1 class = 'text-black-50 display-6 text-center'>No List Entries, why not add some tasks...</h1>";
+                            }
+                            foreach($list as $x){ ?>
 
                             <div class="card rounded-0 border-0 shadow-sm mt-3">
                                 <div class="card-body">
                                   <div class = "row">
-                                    <div class = "col-2"><strong><?= $x['date']; ?></strong></div>
-                                    <div class = "col"><?= $x['entry']; ?></div>
-                                    <div class = "col-2 text-end">O</div>
+                                    <div class = "col-2"><strong><?= $x->date ?></strong></div>
+                                    <div class = "col"><?= $x->todo ?></div>
+                                    <div class = "col-1 text-end"><a href = "/editEntry/<?= $x->id ?>"><i class = "fa fa-pencil text-info"></i></a> &nbsp; <a href = "/deleteEntry/<?= $x->id ?>"><i class = "fa fa-times text-danger"></i></a></div>
                                   </div>
                                 </div>
                               </div>
