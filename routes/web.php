@@ -15,14 +15,54 @@ use App\Models\Listify;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('Dashboard');
+
+Route::get('/completed', function () {
+    return view('completed');
+})->name('Completed');
+
+Route::any('/search', function () {
+    return view('search');
+})->name('Search');
+
 Route::post('/newEntry', function () {
-    echo "<pre>";
-    print_r($_POST);
+    $entry = $_POST['entry'];
+    $date = $_POST['date'];
+
+    $todo = new Listify;
+    $todo->date=$date;
+    $todo->todo=$entry;
+    $todo->status=0;
+    $todo->save();
+
+    return redirect()->route('Dashboard');
 });
-Route::get('/dataTest', function () {
-    $list=Listify::all();
-    foreach($list as $x){
-        echo $x->todo . "<br>";
+
+Route::get('/deleteEntry/{id}', function ($id) {
+    $list = Listify::find($id);
+    $list->delete();
+
+    return redirect()->route('Dashboard');
+});
+
+Route::post('/editEntry/{id}',function($id){  
+    $list=Listify::find($id);  
+    $list->date=$_POST['date'];  
+    $list->todo=$_POST['entry'];  
+    $list->save();  
+
+    return redirect()->route('Dashboard');
+});  
+
+Route::get('/completeEntry/{id}',function($id){  
+    $list=Listify::find($id); 
+    if($list->status == 0){
+        $list->status=1;
+    }else{
+        $list->status=0;
     }
-});
+       
+    $list->save();  
+
+    return redirect()->route('Dashboard');
+});  
