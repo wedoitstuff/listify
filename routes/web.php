@@ -21,6 +21,10 @@ Route::get('/completed', function () {
     return view('completed');
 })->name('Completed');
 
+Route::any('/search', function () {
+    return view('search');
+})->name('Search');
+
 Route::post('/newEntry', function () {
     $entry = $_POST['entry'];
     $date = $_POST['date'];

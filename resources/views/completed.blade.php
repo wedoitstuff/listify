@@ -38,14 +38,36 @@ $list=Listify::where("status", "=", 1)->get();
                     <div class = 'py-3'>
                         <hr>
                     </div>
+                    <div class = 'row mt-2'>
+                        <form action = "/search" method = "POST">
+                            {{ csrf_field() }}
+                            <div class="input-group mb-3">
+                                <input id = "search" type="text" class="form-control" placeholder="Search here..." name = "search" aria-label="Recipient's username" aria-describedby="button-addon2">
+                                <button class="btn btn-outline-info" type="submit" id="button-addon2">Search</button>
+                              </div>
+                        </form>
+                    </div>
                     <div class = "mt-2">
                         <div class = "col">
                             <?php
                             if(count($list) < 1){
                                 echo "<h1 class = 'text-black-50 display-6 text-center' style = 'margin: 0 auto;'>No List Entries completed...</h1>";
                             }
-                            foreach($list as $x){ ?>
-                            <?php if($x->status == 0){$text="";}else{$text="bg-success bg-opacity-25";}?>
+                            foreach($list as $x){ 
+                                
+                                if($x->status == 0){
+                                    $text="";
+                                }else{
+                                    $text="bg-success bg-opacity-25";
+                                }
+                                $date = new DateTime($x->date);
+                                $now = new DateTime();
+    
+                                if($date < $now && $x->status == 0) {
+                                    $text = "bg-danger bg-opacity-25";
+                                }
+                                
+                                ?>
                             <div class="card rounded-0 border-0 shadow-sm mt-3 <?= $text ?>">
                                 <div class="card-body">
                                   <div class = "row">

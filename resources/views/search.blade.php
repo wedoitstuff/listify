@@ -1,6 +1,11 @@
 <?php
 use App\Models\Listify;
-$list=Listify::where("status", "=", 0)->get();
+if(isset($_POST['search'])){
+    $search = $_POST['search'];
+}else{
+    $search = "";
+}
+$list=Listify::where("todo", "LIKE", "%$search%")->get();
 ?>
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -32,18 +37,16 @@ $list=Listify::where("status", "=", 0)->get();
                 <div class="container">
                     <div class = 'row mt-4'>
                         <div class = 'col'>
-                            <h1 class="">Your List Entries</h1>
+                            <h1 class="">Search Results</h1>
                         </div>
                         <div class = 'col text-end'>
-                            <button type="button" class="btn btn-primary btn-pill" data-bs-toggle="modal" data-bs-target="#newListItem">
-                                New List Item
-                            </button>
-                              
+                            <h1>We found: <?= count($list) ?> Result(s)</h1>
                         </div>
                     </div>
                     <div class = 'py-3'>
                         <hr>
                     </div>
+                    
                     <div class = 'row mt-2'>
                         <form action = "/search" method = "POST">
                             {{ csrf_field() }}
@@ -53,30 +56,30 @@ $list=Listify::where("status", "=", 0)->get();
                               </div>
                         </form>
                     </div>
-
-
-
                     <div class = "mt-2">
                         <div class = "col">
                             <?php
                             if(count($list) < 1){
-                                echo "<h1 class = 'text-black-50 display-6 text-center' style = 'margin: 0 auto;'>No List Entries, why not add some tasks...</h1>";
+                                echo "
+                                <h1 class = 'text-black-50 display-6 text-center' style = 'margin: 0 auto;'>Nothing matched your search...</h1>
+                                <div class = 'col text-center mx-auto mt-4'><a href = '/' class = 'btn-primary btn btn-lg'>Go Back</a></div>
+                                ";
                             }
                             foreach($list as $x){ 
                                 
-                            if($x->status == 0){
-                                $text="";
-                            }else{
-                                $text="bg-success bg-opacity-25";
-                            }
-                            $date = new DateTime($x->date);
-                            $now = new DateTime();
-
-                            if($date < $now && $x->status == 0) {
-                                $text = "bg-danger bg-opacity-25";
-                            }
-                            
-                            ?>
+                                if($x->status == 0){
+                                    $text="";
+                                }else{
+                                    $text="bg-success bg-opacity-25";
+                                }
+                                $date = new DateTime($x->date);
+                                $now = new DateTime();
+    
+                                if($date < $now && $x->status == 0) {
+                                    $text = "bg-danger bg-opacity-25";
+                                }
+                                
+                                ?>
                             <div class="card rounded-0 border-0 shadow-sm mt-3 <?= $text ?>">
                                 <div class="card-body">
                                   <div class = "row">
